@@ -19,19 +19,22 @@ server.route('/messages/:id')
 
 
 function editMessage({ body, params }, res) {
-    const id = params.id;
-    if (typeof body.text !== 'string' || !messages[id]) {
+    const message = messages[params.id];
+    if (!message) {
+        return res.sendStatus(404);
+    }
+    if (!body.text) {
         return res.sendStatus(400);
     }
-    messages[id].text = body.text;
-    messages[id].edited = true;
+    message.text = body.text;
+    message.edited = true;
 
-    res.json(prepareResponse(messages[id], id));
+    res.json(prepareResponse(message, params.id));
 }
 
 function deleteMessage({ params }, res) {
     if (!messages[params.id]) {
-        return res.sendStatus(400);
+        return res.sendStatus(404);
     }
     delete messages[params.id];
 
@@ -50,7 +53,7 @@ function sendMessages({ query }, res) {
 }
 
 function getMessage({ body, query }, res) {
-    if (typeof body.text !== 'string') {
+    if (!body.text) {
         return res.sendStatus(400);
     }
     const newMessage = { text: body.text };
