@@ -52,6 +52,10 @@ function listFunction(args) {
 }
 
 function sendFunction(args) {
+    if (!args.text) {
+        return Promise.reject(new Error('No text'));
+    }
+
     return got(url, {
         method: 'POST',
         port: 8080,
@@ -63,6 +67,10 @@ function sendFunction(args) {
 }
 
 function deleteFunction(args) {
+    if (!args.id) {
+        return Promise.reject(new Error('No id'));
+    }
+
     return got(url + args.id, {
         method: 'DELETE',
         port: 8080,
@@ -76,6 +84,10 @@ function deleteFunction(args) {
 }
 
 function editFunction(args) {
+    if (!args.id || !args.text) {
+        return Promise.reject(new Error('No id or text'));
+    }
+
     return got(url + args.id, {
         method: 'PATCH',
         port: 8080,
