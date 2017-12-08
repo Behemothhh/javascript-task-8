@@ -44,8 +44,8 @@ function deleteMessage({ params }, res) {
 function sendMessages({ query }, res) {
     res.json(Object.entries(messages)
         .filter(message => {
-            const isToEqual = !query.to || low(query.to) === low(message[1].to);
-            const isFromEqual = !query.from || low(query.from) === low(message[1].from);
+            const isToEqual = !query.to || query.to === message[1].to;
+            const isFromEqual = !query.from || query.from === message[1].from;
 
             return isToEqual && isFromEqual;
         })
@@ -68,14 +68,6 @@ function getMessage({ body, query }, res) {
     messages[id] = newMessage;
 
     res.json(prepareResponse(newMessage, id));
-}
-
-function low(text) {
-    if (typeof text !== 'string') {
-        return false;
-    }
-
-    return text.toLowerCase();
 }
 
 function prepareResponse(message, id) {
