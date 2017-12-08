@@ -18,7 +18,7 @@ server.route('/messages/:id')
     .patch(jsonParser, editMessage);
 
 
-function editMessage({ body, params, query }, res) {
+function editMessage({ body, params }, res) {
     const id = params.id;
     if (typeof body.text !== 'string' || !messages[id]) {
         return res.sendStatus(400);
@@ -26,7 +26,7 @@ function editMessage({ body, params, query }, res) {
     messages[id].text = body.text;
     messages[id].edited = true;
 
-    res.json(prepareResponse(messages[id], id, query.v));
+    res.json(prepareResponse(messages[id], id));
 }
 
 function deleteMessage({ params }, res) {
@@ -43,7 +43,7 @@ function sendMessages({ query }, res) {
 
             return isToEqual && isFromEqual;
         })
-        .map(message => prepareResponse(message[1], message[0], query.v)));
+        .map(message => prepareResponse(message[1], message[0])));
 }
 
 function getMessage({ body, query }, res) {
@@ -61,7 +61,7 @@ function getMessage({ body, query }, res) {
 
     messages[id] = newMessage;
 
-    res.json(prepareResponse(newMessage, id, query.v));
+    res.json(prepareResponse(newMessage, id));
 }
 
 function low(text) {
@@ -72,12 +72,8 @@ function low(text) {
     return text.toLowerCase();
 }
 
-function prepareResponse(message, id, v) {
-    if (v) {
-        return Object.assign({ id }, message);
-    }
-
-    return message;
+function prepareResponse(message, id) {
+    return Object.assign({ id }, message);
 }
 
 module.exports = server;

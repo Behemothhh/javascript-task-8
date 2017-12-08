@@ -50,7 +50,7 @@ function listFunction(args) {
             console.info(response.body);
 
             return response.body
-                .reduce((answer, element) => answer.concat(prepareText(element)), [])
+                .reduce((answer, element) => answer.concat(prepareText(element, args)), [])
                 .join('\n\n');
         });
 }
@@ -66,7 +66,7 @@ function sendFunction(args) {
         .then(response => {
             console.info(response.body);
 
-            return prepareText(response.body);
+            return prepareText(response.body, args);
         });
 }
 
@@ -94,13 +94,13 @@ function editFunction(args) {
         .then(response => {
             console.info(response.body);
 
-            return prepareText(response.body);
+            return prepareText(response.body, args);
         });
 }
 
-function prepareText(data) {
+function prepareText(data, { v }) {
     let tempAnswer = '';
-    if (Number.isInteger(parseInt(data.id))) {
+    if (v) {
         tempAnswer += (chalk.hex('#FF0')('ID') + ': ' + data.id + '\n');
     }
     if (data.from) {
@@ -124,9 +124,6 @@ function createQuery(args) {
     }
     if (args.to) {
         tempQuery.to = args.to;
-    }
-    if (args.v) {
-        tempQuery.v = args.v;
     }
 
     return tempQuery;
