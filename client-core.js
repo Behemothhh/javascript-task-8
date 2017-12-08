@@ -97,7 +97,7 @@ function editFunction(args) {
         .then(response => prepareText(response.body, args));
 }
 
-function prepareText(data, { v }) {
+function prepareText(data, { command, v }) {
     let tempAnswer = '';
     if (v && data.id) {
         tempAnswer += (chalk.hex('#FF0')('ID') + ': ' + data.id + '\n');
@@ -109,7 +109,7 @@ function prepareText(data, { v }) {
         tempAnswer += (chalk.hex('#F00')('TO') + ': ' + data.to + '\n');
     }
     if (data.text) {
-        const editedText = data.edited ? chalk.hex('#777')('(edited)') : '';
+        const editedText = data.edited && command === 'list' ? chalk.hex('#777')('(edited)') : '';
         tempAnswer += (chalk.hex('#0F0')('TEXT') + ': ' + data.text + editedText);
     }
 
