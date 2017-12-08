@@ -30,6 +30,9 @@ function editMessage({ body, params }, res) {
 }
 
 function deleteMessage({ params }, res) {
+    if (!messages[params.id]) {
+        return res.sendStatus(400);
+    }
     delete messages[params.id];
 
     return res.json({ status: 'ok' });

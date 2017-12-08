@@ -46,13 +46,9 @@ function listFunction(args) {
         port: 8080,
         query: createQuery(args)
     })
-        .then(response => {
-            console.info(response.body);
-
-            return response.body
-                .reduce((answer, element) => answer.concat(prepareText(element, args)), [])
-                .join('\n\n');
-        });
+        .then(response => response.body
+            .reduce((answer, element) => answer.concat(prepareText(element, args)), [])
+            .join('\n\n'));
 }
 
 function sendFunction(args) {
@@ -63,11 +59,7 @@ function sendFunction(args) {
         json: true,
         body: { text: args.text }
     })
-        .then(response => {
-            console.info(response.body);
-
-            return prepareText(response.body, args);
-        });
+        .then(response => prepareText(response.body, args));
 }
 
 function deleteFunction(args) {
@@ -77,9 +69,8 @@ function deleteFunction(args) {
         json: true
     })
         .then(response => {
-            console.info(response.body);
             if (response.body.status === 'ok') {
-                return 'DELTED';
+                return 'DELETED';
             }
         });
 }
@@ -91,11 +82,7 @@ function editFunction(args) {
         json: true,
         body: { text: args.text }
     })
-        .then(response => {
-            console.info(response.body);
-
-            return prepareText(response.body, args);
-        });
+        .then(response => prepareText(response.body, args));
 }
 
 function prepareText(data, { v }) {
