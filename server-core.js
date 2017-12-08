@@ -26,7 +26,7 @@ function editMessage({ body, params, query }, res) {
     messages[id].text = body.text;
     messages[id].edited = true;
 
-    res.json(query.id ? [id, messages[id]] : messages[id]);
+    res.json(prepareResponse(messages[id], id, query.v));
 }
 
 function deleteMessage({ params }, res) {
@@ -43,7 +43,7 @@ function sendMessages({ query }, res) {
 
             return isToEqual && isFromEqual;
         })
-        .map(message => query.id ? message : message[1]));
+        .map(message => prepareResponse(message[1], message[0], query.v)));
 }
 
 function getMessage({ body, query }, res) {
@@ -61,7 +61,7 @@ function getMessage({ body, query }, res) {
 
     messages[id] = newMessage;
 
-    res.json(query.id ? [id, newMessage] : newMessage);
+    res.json(prepareResponse(newMessage, id, query.v));
 }
 
 function low(text) {
@@ -70,6 +70,14 @@ function low(text) {
     }
 
     return text.toLowerCase();
+}
+
+function prepareResponse(message, id, v) {
+    if (v) {
+        return Object.assign({ id }, message);
+    }
+
+    return message;
 }
 
 module.exports = server;

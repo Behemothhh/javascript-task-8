@@ -2,7 +2,7 @@
 'use strict';
 
 module.exports.execute = execute;
-module.exports.isStar = false;
+module.exports.isStar = true;
 
 const got = require('got');
 const ArgumentParser = require('argparse').ArgumentParser;
@@ -100,9 +100,8 @@ function editFunction(args) {
 
 function prepareText(data) {
     let tempAnswer = '';
-    if (Number.isInteger(parseInt(data[0]))) {
-        tempAnswer += (chalk.hex('#FF0')('ID') + ': ' + data[0] + '\n');
-        data = data[1];
+    if (Number.isInteger(parseInt(data.id))) {
+        tempAnswer += (chalk.hex('#FF0')('ID') + ': ' + data.id + '\n');
     }
     if (data.from) {
         tempAnswer += (chalk.hex('#F00')('FROM') + ': ' + data.from + '\n');
@@ -127,7 +126,7 @@ function createQuery(args) {
         tempQuery.to = args.to;
     }
     if (args.v) {
-        tempQuery.id = args.v;
+        tempQuery.v = args.v;
     }
 
     return tempQuery;
