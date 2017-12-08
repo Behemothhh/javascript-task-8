@@ -2,7 +2,7 @@
 'use strict';
 
 module.exports.execute = execute;
-module.exports.isStar = true;
+module.exports.isStar = false;
 
 const got = require('got');
 const ArgumentParser = require('argparse').ArgumentParser;
