@@ -20,7 +20,7 @@ server.route('/messages/:id')
 
 function editMessage({ body, params, query }, res) {
     const id = params.id;
-    if (!body.text || !messages[id]) {
+    if (!String.isString(body.text) || !messages[id]) {
         return res.sendStatus(400);
     }
     messages[id].text = body.text;
@@ -47,7 +47,7 @@ function sendMessages({ query }, res) {
 }
 
 function getMessage({ body, query }, res) {
-    if (!body.text) {
+    if (!String.isString(body.text)) {
         return res.sendStatus(400);
     }
     const newMessage = { text: body.text };
@@ -65,7 +65,7 @@ function getMessage({ body, query }, res) {
 }
 
 function low(text) {
-    if (text === undefined) {
+    if (!String.isString(text)) {
         return false;
     }
 
