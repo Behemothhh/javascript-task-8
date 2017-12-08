@@ -41,7 +41,8 @@ function deleteMessage({ params }, res) {
     return res.json({ status: 'ok' });
 }
 
-function sendMessages({ query }, res) {
+function sendMessages({ query, url }, res) {
+    console.info(url);
     res.json(Object.entries(messages)
         .filter(message => {
             const isToEqual = !query.to || query.to === message[1].to;

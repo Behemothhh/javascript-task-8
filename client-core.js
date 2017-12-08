@@ -41,28 +41,29 @@ function execute() {
 }
 
 function listFunction(args) {
-    return got(url, {
-        json: true,
-        port: 8080,
-        query: createQuery(args)
-    })
+    const options = { json: true, port: 8080 };
+    if (args.from || args.to) {
+        options.query = createQuery(args);
+    }
+
+    return got(url, options)
         .then(response => response.body
             .reduce((answer, element) => answer.concat(prepareText(element, args)), [])
             .join('\n\n'));
 }
 
 function sendFunction(args) {
-    if (!args.text) {
-        return Promise.reject(new Error('No text'));
+    const options = {
+        method: 'POST',
+        json: true,
+        port: 8080,
+        body: { text: args.text }
+    };
+    if (args.from || args.to) {
+        options.query = createQuery(args);
     }
 
-    return got(url, {
-        method: 'POST',
-        port: 8080,
-        query: createQuery(args),
-        json: true,
-        body: { text: args.text }
-    })
+    return got(url, options)
         .then(response => prepareText(response.body, args));
 }
 
