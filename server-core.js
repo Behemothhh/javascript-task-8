@@ -56,6 +56,7 @@ function getMessage({ body, query }, res) {
     }
     const id = shortid.generate();
     const newMessage = { id, text: body.text };
+
     if (query.from) {
         newMessage.from = query.from;
     }
