@@ -56,7 +56,7 @@ function deleteFunction(args) {
         return Promise.reject(new Error('No id'));
     }
 
-    return got(URL + args.id, setOptions('DELETE'))
+    return got(URL + args.id, setOptions('DELETE', {}))
         .then(response => {
             if (response.body.status === 'ok') {
                 return 'DELETED';
