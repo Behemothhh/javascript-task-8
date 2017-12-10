@@ -40,7 +40,7 @@ function execute() {
 }
 
 function listFunction(args) {
-    return got(URL, setOptions('GET', args))
+    return got(URL, setOptions('GET', { to: args.to, from: args.from }))
         .then(response => response.body
             .reduce((answer, element) => answer.concat(prepareText(element, args)), [])
             .join('\n\n'));
@@ -69,7 +69,7 @@ function editFunction(args) {
         return Promise.reject(new Error('No id or text'));
     }
 
-    return got(URL + args.id, setOptions('PATCH', args))
+    return got(URL + args.id, setOptions('PATCH', { text: args.text }))
         .then(response => prepareText(response.body, args));
 }
 
