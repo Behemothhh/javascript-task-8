@@ -75,7 +75,7 @@ function editFunction(args) {
 
 function prepareText(data, { v }) {
     let tempAnswer = '';
-    if (v) {
+    if (v && data.id) {
         tempAnswer += (chalk.hex('#FF0')('ID') + ': ' + data.id + '\n');
     }
     if (data.from) {
