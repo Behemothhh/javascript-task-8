@@ -98,7 +98,7 @@ function setOptions(method, { text, to, from }) {
         method,
         json: true,
         port: PORT,
-        query: {}
+        query: to || from ? {} : undefined
     };
     if (to) {
         tempOptions.query.to = to;
@@ -109,7 +109,6 @@ function setOptions(method, { text, to, from }) {
     if (text) {
         tempOptions.body = { text };
     }
-    console.info(tempOptions);
 
     return tempOptions;
 }
