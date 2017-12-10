@@ -23,8 +23,7 @@ parser.addArgument('-v', { help: 'show message details', action: 'storeTrue' });
 
 function execute() {
     // Внутри этой функции нужно получить и обработать аргументы командной строки
-    const args = parser.parseArgs();
-    console.info(args);
+    const args = parser.parseArgs(process.argv.slice(2));
     switch (args.command) {
         case 'list':
             return listFunction(args);
@@ -35,6 +34,7 @@ function execute() {
         case 'edit':
             return editFunction(args);
         default:
+            Promise.reject('Bad command');
             break;
     }
 
