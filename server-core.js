@@ -2,12 +2,11 @@
 
 const server = require('express')();
 const bodyParser = require('body-parser');
+const shortid = require('shortid');
 
 const jsonParser = bodyParser.json();
 
 const messages = {};
-
-let idCounter = 0;
 
 server.route('/messages')
     .get(sendMessages)
@@ -29,7 +28,7 @@ function editMessage({ body, params }, res) {
     message.text = body.text;
     message.edited = true;
 
-    res.json(prepareResponse(message, params.id));
+    res.json(message);
 }
 
 function deleteMessage({ params }, res) {
@@ -42,36 +41,31 @@ function deleteMessage({ params }, res) {
 }
 
 function sendMessages({ query }, res) {
-    res.json(Object.entries(messages)
+    res.json(Object.values(messages)
         .filter(message => {
-            const isToEqual = !query.to || query.to === message[1].to;
-            const isFromEqual = !query.from || query.from === message[1].from;
+            const isToEqual = !query.to || query.to === message.to;
+            const isFromEqual = !query.from || query.from === message.from;
 
             return isToEqual && isFromEqual;
-        })
-        .map(message => prepareResponse(message[1], message[0])));
+        }));
 }
 
 function getMessage({ body, query }, res) {
     if (!body.text) {
         return res.sendStatus(400);
     }
-    const newMessage = { text: body.text };
+    const id = shortid.generate();
+    const newMessage = { id, text: body.text };
     if (query.from) {
         newMessage.from = query.from;
     }
     if (query.to) {
         newMessage.to = query.to;
     }
-    const id = idCounter++;
 
     messages[id] = newMessage;
 
-    res.json(prepareResponse(newMessage, id));
-}
-
-function prepareResponse(message, id) {
-    return Object.assign({ id }, message);
+    res.json(newMessage);
 }
 
 module.exports = server;
